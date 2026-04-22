@@ -9,7 +9,7 @@
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
         body { background: #050505; color: #fff; font-family: 'Montserrat', sans-serif; overflow-x: hidden; cursor: none; }
 
-        /* КУРСОР */
+        /* ИНТЕРАКТИВНЫЙ КУРСОР */
         #cursor { 
             width: 20px; height: 20px; border: 2px solid #d4af37; border-radius: 50%; 
             position: fixed; pointer-events: none; z-index: 9999; 
@@ -41,26 +41,29 @@
         }
         .hero h1 { font-size: clamp(2.5rem, 8vw, 5.5rem); color: #d4af37; font-weight: 900; letter-spacing: 10px; }
 
-        /* ГАЛЕРЕЯ И ПЛЕЕР */
+        /* ГРИД АРТИСТОВ */
+        .artist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 50px 0; }
+        .master-card {
+            background: rgba(212,175,55,0.03); border: 1px solid rgba(212,175,55,0.2);
+            border-radius: 20px; padding: 60px 30px; transition: 0.5s; text-align: center;
+        }
+        .master-card:hover { transform: translateY(-15px); background: rgba(212,175,55,0.1); border-color: #d4af37; }
+        .master-card h3 { color: #d4af37; font-size: 1.4rem; letter-spacing: 2px; margin-bottom: 10px; }
+
+        /* ГАЛЕРЕЯ С ВИДЕО */
         .artist-detail { text-align: center; }
         .artist-detail h2 { font-size: 3rem; color: #d4af37; margin-bottom: 40px; letter-spacing: 5px; text-transform: uppercase; }
         .artist-gallery { display: flex; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
-        
-        .main-media { 
-            flex: 2; height: 500px; border-radius: 20px; overflow: hidden; 
-            border: 1px solid rgba(212,175,55,0.3); background: #000; position: relative;
-        }
-        /* Чтобы видео YouTube перекрывало всё и выглядело как фон */
-        .main-media iframe {
-            position: absolute; top: 50%; left: 50%;
-            width: 100%; height: 100%;
-            transform: translate(-50%, -50%);
-            pointer-events: none; /* Чтобы нельзя было нажать паузу случайно */
-        }
-
+        .main-media { flex: 2; height: 500px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(212,175,55,0.3); background: #111; }
         .gallery-side { flex: 1; display: flex; flex-direction: column; gap: 20px; min-width: 280px; }
         .artist-photo-frame { height: 240px; background: #111; border-radius: 20px; border: 1px solid rgba(212,175,55,0.3); overflow: hidden; }
         .photo { width: 100%; height: 100%; background-position: center; background-size: cover; transition: 0.5s; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+
+        /* ИНФО-БЛОКИ (Расписание и FAQ) */
+        .info-block { background: rgba(255,255,255,0.02); padding: 30px; border-radius: 20px; border: 1px solid #1a1a1a; margin-bottom: 20px; text-align: left; }
+        .info-block h3 { color: #d4af37; margin-bottom: 15px; text-transform: uppercase; font-size: 1.1rem; }
+        .schedule-row { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding: 15px 0; }
 
         /* Кнопки и Ссылки */
         .cta-btn { padding: 18px 45px; background: #d4af37; border: none; border-radius: 50px; font-weight: 900; transition: 0.4s; text-transform: uppercase; color: #000; }
@@ -68,14 +71,17 @@
         .back-link { margin-top: 30px; color: #666; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 2px; transition: 0.3s; display: inline-block; }
         .back-link:hover { color: #d4af37; }
 
-        /* Расписание и FAQ */
-        .info-block { background: rgba(255,255,255,0.02); padding: 30px; border-radius: 20px; border: 1px solid #1a1a1a; margin-bottom: 20px; text-align: left; }
-        .info-block h3 { color: #d4af37; margin-bottom: 15px; text-transform: uppercase; }
-        .schedule-row { display: flex; justify-content: space-between; border-bottom: 1px solid #222; padding: 15px 0; }
+        /* КОНТАКТЫ */
+        .footer-contacts { padding: 80px 5%; background: #080808; border-top: 1px solid #1a1a1a; text-align: center; margin-top: 50px; }
+        .contact-grid { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; margin: 40px 0; }
+        .contact-item h4 { color: #d4af37; font-size: 0.8rem; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; }
 
-        footer { padding: 60px 5%; background: #080808; border-top: 1px solid #1a1a1a; text-align: center; margin-top: 50px; }
+        /* МОДАЛКА */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: #0a0a0a; padding: 40px; border-radius: 20px; border: 1px solid #d4af37; width: 95%; max-width: 400px; text-align: center; }
+        input { width: 100%; padding: 15px; margin-bottom: 15px; background: #111; border: 1px solid #333; color: #fff; border-radius: 10px; outline: none; }
 
-        @media (max-width: 768px) { #cursor { display: none; } body { cursor: auto; } .main-media { height: 300px; } }
+        @media (max-width: 768px) { #cursor { display: none; } body { cursor: auto; } .artist-gallery { flex-direction: column; } .main-media { height: 300px; } }
     </style>
 </head>
 <body>
@@ -83,31 +89,39 @@
     <div id="cursor"></div>
     <div id="particles-js"></div>
 
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-content">
+            <h2 style="color:#d4af37; margin-bottom: 20px;">ЗАЯВКА ELITE</h2>
+            <form onsubmit="event.preventDefault(); alert('Ваша заявка принята!'); closeModal();">
+                <input type="text" placeholder="Ваше имя" required>
+                <input type="tel" placeholder="Ваш телефон" required>
+                <button type="submit" class="cta-btn" style="width: 100%;">Заказать билет</button>
+                <p onclick="closeModal()" style="color:#666; margin-top:20px; cursor:pointer;">Закрыть</p>
+            </form>
+        </div>
+    </div>
+
     <nav>
         <div class="logo" onclick="showPage('home-page')">ELITE ASTANA</div>
         <ul class="nav-links">
             <li onclick="showPage('home-page')">Главная</li>
             <li onclick="showPage('schedule-page')">Расписание</li>
             <li onclick="showPage('faq-page')">FAQ</li>
+            <li onclick="openModal()" style="color:#d4af37; font-weight: 900;">БИЛЕТЫ</li>
         </ul>
     </nav>
 
     <div id="home-page" class="page active-page">
         <section class="hero">
             <h1>CIRCUS ELITE</h1>
-            <button class="cta-btn" style="margin-top: 25px;">Забронировать места</button>
+            <button class="cta-btn" style="margin-top: 25px;" onclick="openModal()">Забронировать ложу</button>
         </section>
         <div class="container">
-            <div class="artist-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-                <div class="master-card" onclick="showPage('page-aerial')" style="background: rgba(212,175,55,0.05); padding: 50px; border: 1px solid #d4af37; border-radius: 20px; text-align: center;">
-                    <h3>CORDE DE PAREIL</h3>
-                </div>
-                <div class="master-card" onclick="showPage('page-duo')" style="background: rgba(212,175,55,0.05); padding: 50px; border: 1px solid #d4af37; border-radius: 20px; text-align: center;">
-                    <h3>DUO LOVE STORY</h3>
-                </div>
-                <div class="master-card" onclick="showPage('page-magic')" style="background: rgba(212,175,55,0.05); padding: 50px; border: 1px solid #d4af37; border-radius: 20px; text-align: center;">
-                    <h3>MAGIC SHOW</h3>
-                </div>
+            <h2 style="text-align: center; color: #d4af37; margin-bottom: 40px; letter-spacing: 5px;">ПРОГРАММА</h2>
+            <div class="artist-grid">
+                <div class="master-card" onclick="showPage('page-aerial')"><h3>CORDE DE PAREIL</h3><p>Вертикальный полет</p></div>
+                <div class="master-card" onclick="showPage('page-duo')"><h3>DUO LOVE STORY</h3><p>Воздушный роман</p></div>
+                <div class="master-card" onclick="showPage('page-magic')"><h3>MAGIC SHOW</h3><p>Великая иллюзия</p></div>
             </div>
         </div>
     </div>
@@ -116,15 +130,14 @@
         <div class="container artist-detail">
             <h2>CORDE DE PAREIL</h2>
             <div class="artist-gallery">
-                <div class="main-media">
-                    <iframe src="https://www.youtube.com/embed/ССЫЛКА_1?autoplay=1&mute=1&loop=1&playlist=ССЫЛКА_1&controls=0&showinfo=0&rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-                </div>
+                <div class="main-media"><video autoplay muted loop playsinline><source src="corde-video.mp4" type="video/mp4"></video></div>
                 <div class="gallery-side">
                     <div class="artist-photo-frame"><div class="photo" style="background-image: url('corde2.jpg');"></div></div>
                     <div class="artist-photo-frame"><div class="photo" style="background-image: url('corde3.jpg');"></div></div>
                 </div>
             </div>
-            <p>Вертикальная акробатика мирового уровня.</p>
+            <p>Выступление на вертикальном канате без страховки. Баланс силы и грации.</p>
+            <button class="cta-btn" onclick="openModal()">Купить билет</button><br>
             <p class="back-link" onclick="showPage('home-page')">← Назад в фойе</p>
         </div>
     </div>
@@ -133,15 +146,14 @@
         <div class="container artist-detail">
             <h2>DUO LOVE STORY</h2>
             <div class="artist-gallery">
-                <div class="main-media">
-                    <iframe src="https://www.youtube.com/embed/ССЫЛКА_2?autoplay=1&mute=1&loop=1&playlist=ССЫЛКА_2&controls=0&showinfo=0&rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-                </div>
+                <div class="main-media"><video autoplay muted loop playsinline><source src="duo-video.mp4" type="video/mp4"></video></div>
                 <div class="gallery-side">
                     <div class="artist-photo-frame"><div class="photo" style="background-image: url('duo1.jpg');"></div></div>
                     <div class="artist-photo-frame"><div class="photo" style="background-image: url('duo2.jpg');"></div></div>
                 </div>
             </div>
-            <p>Воздушный полет двоих влюбленных.</p>
+            <p>Чувственная акробатика под куполом цирка. История страсти и доверия.</p>
+            <button class="cta-btn" onclick="openModal()">Купить билет</button><br>
             <p class="back-link" onclick="showPage('home-page')">← Назад в фойе</p>
         </div>
     </div>
@@ -150,25 +162,25 @@
         <div class="container artist-detail">
             <h2>MAGIC SHOW</h2>
             <div class="artist-gallery">
-                <div class="main-media">
-                    <iframe src="https://www.youtube.com/embed/ССЫЛКА_3?autoplay=1&mute=1&loop=1&playlist=ССЫЛКА_3&controls=0&showinfo=0&rel=0" frameborder="0" allow="autoplay; encrypted-media"></iframe>
-                </div>
+                <div class="main-media"><video autoplay muted loop playsinline><source src="magic-video.mp4" type="video/mp4"></video></div>
                 <div class="gallery-side">
                     <div class="artist-photo-frame"><div class="photo" style="background-image: url('magic1.jpg');"></div></div>
                     <div class="artist-photo-frame"><div class="photo" style="background-image: url('magic2.jpg');"></div></div>
                 </div>
             </div>
-            <p>Магия, разрушающая границы возможного.</p>
+            <p>Магия, которая происходит прямо на ваших глазах. Иллюзия мирового масштаба.</p>
+            <button class="cta-btn" onclick="openModal()">Купить билет</button><br>
             <p class="back-link" onclick="showPage('home-page')">← Назад в фойе</p>
         </div>
     </div>
 
     <div id="schedule-page" class="page">
         <div class="container artist-detail">
-            <h2>РАСПИСАНИЕ</h2>
+            <h2>РАСПИСАНИЕ 2026</h2>
             <div class="info-block">
                 <div class="schedule-row"><span>Вторник - Пятница</span><span>19:00</span></div>
                 <div class="schedule-row"><span>Суббота - Воскресенье</span><span>14:00, 18:00</span></div>
+                <div class="schedule-row"><span>Понедельник</span><span style="color:#d4af37">Выходной</span></div>
             </div>
             <p class="back-link" onclick="showPage('home-page')">← Назад в фойе</p>
         </div>
@@ -177,12 +189,22 @@
     <div id="faq-page" class="page">
         <div class="container artist-detail">
             <h2>FAQ</h2>
-            <div class="info-block"><h3>Можно ли снимать?</h3><p>Да, без вспышки.</p></div>
+            <div class="info-block"><h3>Длительность</h3><p>Шоу длится 120 минут с антрактом.</p></div>
+            <div class="info-block"><h3>Дети</h3><p>Бесплатно до 3-х лет без отдельного места.</p></div>
+            <div class="info-block"><h3>Съемка</h3><p>Разрешена фотосъемка без вспышки.</p></div>
             <p class="back-link" onclick="showPage('home-page')">← Назад в фойе</p>
         </div>
     </div>
 
-    <footer>© 2026 CIRCUS ELITE ASTANA</footer>
+    <div class="footer-contacts">
+        <h2 style="color:#d4af37; letter-spacing: 5px;">КОНТАКТЫ</h2>
+        <div class="contact-grid">
+            <div class="contact-item"><h4>Адрес</h4><p>Астана, пр. Кабанбай Батыра, 5</p></div>
+            <div class="contact-item"><h4>Телефон</h4><p>+7 (777) 000 00 00</p></div>
+            <div class="contact-item"><h4>E-mail</h4><p>vip@elite-circus.kz</p></div>
+        </div>
+        <p style="margin-top: 40px; color: #333; font-size: 0.7rem;">© 2026 CIRCUS ELITE ASTANA</p>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
@@ -201,12 +223,24 @@
 
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(pageId).classList.add('active-page');
+            const active = document.getElementById(pageId);
+            active.classList.add('active-page');
+            
+            // Управление видео
+            document.querySelectorAll('video').forEach(v => v.pause());
+            const v = active.querySelector('video'); if(v) v.play();
+
             window.scrollTo(0,0);
             initCursorHover();
         }
 
-        particlesJS("particles-js", { "particles": { "number": { "value": 30 }, "color": { "value": "#d4af37" }, "move": { "enable": true, "speed": 1 } } });
+        function openModal() { document.getElementById('orderModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+
+        particlesJS("particles-js", {
+            "particles": { "number": { "value": 40 }, "color": { "value": "#d4af37" }, "move": { "enable": true, "speed": 1.2 } }
+        });
+
         window.onload = () => initCursorHover();
     </script>
 </body>
